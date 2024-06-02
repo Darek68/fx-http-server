@@ -5,13 +5,14 @@ import ru.flamexander.http.server.HttpRequest;
 import ru.flamexander.http.server.application.Item;
 import ru.flamexander.http.server.application.Storage;
 import ru.flamexander.http.server.processors.RequestProcessor;
+import ru.flamexander.http.server.processors.RequestProcessorType;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class GetAllProductsProcessor implements RequestProcessor {
+public class GetAllProductsProcessor implements RequestProcessor, RequestProcessorType {
     @Override
     public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
         List<Item> items = Storage.getItems();
@@ -22,5 +23,10 @@ public class GetAllProductsProcessor implements RequestProcessor {
                 "Access-Control-Allow-Origin: *\r\n\r\n" + gson.toJson(items);
         output.write(result.getBytes(StandardCharsets.UTF_8));
         output.flush();
+    }
+
+    @Override
+    public String headerType() {
+        return "application/json";
     }
 }
